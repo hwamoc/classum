@@ -1,0 +1,4 @@
+db:
+  database: 'prod'
+  synchronize: false
+  logging: false
