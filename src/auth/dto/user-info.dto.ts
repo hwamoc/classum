@@ -13,10 +13,14 @@ export class UserInfoDto {
     password: string;
 
     @IsString()
-    @Matches(/^(?=.{1,50}$)[가-힣a-z]+(?:['_.\s][a-z]+)*$/i, { message: 'Only english, korean, and some specail character \'_. possible. Firstname  can\'t start or end with \' _ . and space' })
+    @Matches(/^[가-힣a-z]+(?:['_.\s][a-z]+)*$/i, { message: 'Only english, korean, and some specail character \'_. possible. Firstname  can\'t start or end with \' _ . and space' })
+    @Length(1, 50, { message: 'There must be 1 to 50 chars in the string' })
+    @IsNotEmpty({ message: 'The firstname is required' })
     firstname: string;
 
     @IsString()
-    @Matches(/^(?=.{1,50}$)[가-힣a-z]+(?:['_.\s][a-z]+)*$/i, { message: 'Only english, korean, and some specail character \'_. possible. Lastname can\'t start or end with \' _ . and space' })
+    @Matches(/^[가-힣a-z]+(?:['_.\s][a-z]+)*$/i, { message: 'Only english, korean, and some specail character \'_. possible. Lastname can\'t start or end with \' _ . and space' })
+    @Length(1, 50, { message: 'There must be 1 to 50 chars in the string' })
+    @IsNotEmpty({ message: 'The lastname is required' })
     lastname: string;
 }
