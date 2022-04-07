@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, Length, Matches } from "class-validator";
 
-export class UserInfoDto {
+export class UserSignupInfoDto {
     @IsString()
     @IsEmail({}, { message: 'Incorrect email' })
     @IsNotEmpty({ message: 'The email is required' })

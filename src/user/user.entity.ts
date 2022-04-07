@@ -1,6 +1,6 @@
+import { Exclude } from 'class-transformer';
 import { Content } from 'src/common/content';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { Board } from '../boards/board.entity';
+import { Column, Entity, Unique } from 'typeorm';
 
 @Entity()
 @Unique(['email'])
@@ -21,7 +21,9 @@ export class User extends Content {
     @Column({ nullable: true })
     profileUrl: string;
 
-    @OneToMany(type => Board, board => board.user, { eager: true })
-    boards: Board[];
+    @Column({ nullable: true })
+    @Exclude()
+    currentHashedRefreshToken?: string;
+
 
 }

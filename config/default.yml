@@ -9,5 +9,12 @@ db:
   password: '12345'
 
 jwt:
-  expiresIn: 3600
-  secret: 'SceretSauce'
+  access:
+    expiresIn: 3600
+    secret: 'SceretSauce'
+  refresh:
+    expiresIn: 2592000
+    secret: 'Refreshments'
+
+file:
+  path: 'public'
