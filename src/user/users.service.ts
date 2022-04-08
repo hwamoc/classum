@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { UserSignupInfoDto } from 'src/auth/dto/user-signup-info.dto';
+import UtilsService from 'src/utils/utils.service';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 
@@ -10,6 +11,7 @@ export class UsersService {
     constructor(
         @InjectRepository(UserRepository)
         private userRepository: UserRepository,
+        private utilsService: UtilsService,
     ) {}
 
     async create(userSignupInfoDto: UserSignupInfoDto): Promise<User> {
@@ -54,5 +56,15 @@ export class UsersService {
         return this.userRepository.update(id, {
             currentHashedRefreshToken: null,
         });
+    }
+
+    async uploadProfile(user: User, file: Express.Multer.File) {
+        const generatedFile: string = this.utilsService.uploadFile(file);
+        const { affected } = await this.userRepository.update(user.id, {
+            profileUrl: generatedFile,
+        });
+        if (affected === 0) {
+            throw new NotFoundException(`User profile image uploading failed. User id: ${user.id}`);
+        }
     }
 }

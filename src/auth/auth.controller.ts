@@ -1,13 +1,9 @@
-import { Body, Controller, Get, Post, Req, Res, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Get, Post, Req, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from 'src/skip-auth.decorator';
 import { UsersService } from 'src/user/users.service';
-import { multerOptions } from 'src/utils/multer-options';
 import { User } from '../user/user.entity';
-import UtilsService from '../utils/utils.service';
 import { AuthService } from './auth.service';
-import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import { UserSignupInfoDto } from './dto/user-signup-info.dto';
 import { GetUser } from './get-user.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -18,7 +14,6 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 export class AuthController {
     constructor(
         private authService: AuthService, 
-        private utilsService: UtilsService,
         private readonly usersService: UsersService,
     ) {}
 
@@ -86,21 +81,6 @@ export class AuthController {
 
         res.clearCookie('Authentication', accessOption);
         res.clearCookie('Refresh', refreshOption);
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Post('/upload-pfp')
-    @UseInterceptors(FileInterceptor('file', multerOptions))
-    uploadProfile(@UploadedFile() file: Express.Multer.File) {
-        const generatedFile: string = this.utilsService.uploadFile(file);
-        // TODO: 응답 형태 통일
-        return {
-            status: 200,
-            message: '파일 업로드를 성공하였습니다.',
-            data: {
-                files: generatedFile,
-            },
-        };
     }
 
     @UseGuards(JwtAuthGuard)

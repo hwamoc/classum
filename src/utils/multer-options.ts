@@ -40,6 +40,7 @@ export const multerOptions = {
 
 // 파일 업로드 경로
 export const uploadFileURL = (file: Express.Multer.File): string => {
+    const port = config.get('server.port');
     const uploadPath = config.get('file.path');
-    return `/${uploadPath}/${file.filename}`;
+    return `http://localhost:${port}/${uploadPath}/${file.filename}`;
 }
