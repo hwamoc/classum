@@ -5,6 +5,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Public } from 'src/skip-auth.decorator';
 import { multerOptions } from 'src/utils/multer-options';
 import UtilsService from 'src/utils/utils.service';
+import { Id } from './model/user-model';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -17,19 +18,20 @@ export class UsersController {
         private utilsService: UtilsService,
     ) {}
 
+    // for test
     @Public()
-    @Get(':email')
-    getByEmail(@Param() email: string): Promise<User> {
-        return this.usersService.getByEmail(email);
+    @Get(':id')
+    getById(@Param() id: Id): Promise<User> {
+        return this.usersService.getOneBy(id);
     }
 
-    @Post('/upload-pfp')
+    @Post('/profile')
     @UseInterceptors(FileInterceptor('file', multerOptions))
-    uploadProfile(
+    updateProfile(
         @GetUser() user: User,
         @UploadedFile() file: Express.Multer.File,
     ): Promise<void> {
-        return this.usersService.uploadProfile(user, file);
+        return this.usersService.updateProfile(user, file);
         // TODO: 응답 형태 통일
     }
 }

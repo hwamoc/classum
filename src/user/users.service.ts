@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { UserSignupInfoDto } from 'src/auth/dto/user-signup-info.dto';
+import { SignupUserDto } from 'src/auth/dto/signup-user.dto';
 import UtilsService from 'src/utils/utils.service';
+import { Email, Id } from './model/user-model';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 
@@ -14,24 +15,16 @@ export class UsersService {
         private utilsService: UtilsService,
     ) {}
 
-    async create(userSignupInfoDto: UserSignupInfoDto): Promise<User> {
+    async create(userSignupInfoDto: SignupUserDto): Promise<User> {
         const user: User = this.userRepository.create(userSignupInfoDto);
         await this.userRepository.save(user);
         return user;
     }
 
-    async getById(id: number): Promise<User> {
-        const user = this.userRepository.findOne({ id });
+    async getOneBy(param: Id | Email): Promise<User> {
+        const user = await this.userRepository.findOne(param);
         if (!user) {
-            throw new NotFoundException(`User with this id: ${id} does not exist`);
-        }
-        return user;
-    }
-
-    async getByEmail(email: string): Promise<User> {
-        const user = this.userRepository.findOne({ email });
-        if (!user) {
-            throw new NotFoundException(`User with this email: ${email} does not exist`);
+            throw new NotFoundException(`User with this ${Object.keys(param)}: ${Object.values(param)} does not exist`);
         }
         return user;
     }
@@ -43,7 +36,7 @@ export class UsersService {
     }
 
     async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
-        const user = await this.getById(id);
+        const user = await this.getOneBy({ id });
     
         const isRefreshTokenMatching = await bcrypt.compare(refreshToken, user.currentHashedRefreshToken);
     
@@ -58,7 +51,7 @@ export class UsersService {
         });
     }
 
-    async uploadProfile(user: User, file: Express.Multer.File) {
+    async updateProfile(user: User, file: Express.Multer.File) {
         const generatedFile: string = this.utilsService.uploadFile(file);
         const { affected } = await this.userRepository.update(user.id, {
             profileUrl: generatedFile,

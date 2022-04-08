@@ -4,7 +4,7 @@ import { Public } from 'src/skip-auth.decorator';
 import { UsersService } from 'src/user/users.service';
 import { User } from '../user/user.entity';
 import { AuthService } from './auth.service';
-import { UserSignupInfoDto } from './dto/user-signup-info.dto';
+import { SignupUserDto } from './dto/signup-user.dto';
 import { GetUser } from './get-user.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -19,7 +19,7 @@ export class AuthController {
 
     @Public()
     @Post('/signup')
-    signUp(@Body(ValidationPipe) userSignupInfoDto: UserSignupInfoDto): Promise<any> {
+    signUp(@Body(ValidationPipe) userSignupInfoDto: SignupUserDto): Promise<any> {
         return this.authService.signUp(userSignupInfoDto);
     }
 
@@ -87,5 +87,6 @@ export class AuthController {
     @Post('/authTest')
     test(@GetUser() user: User) {
         console.log('AUTH TEST>> user: ', user);
+        return user;
     }
 }

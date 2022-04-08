@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import * as config from 'config';
 import { UsersService } from '../user/users.service';
-import { UserSignupInfoDto } from './dto/user-signup-info.dto';
+import { SignupUserDto } from './dto/signup-user.dto';
 import { AuthCookie, RefreshCookie, CookieClearOption } from './model/auth-model';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class AuthService {
 
     // TODO: password 없는 user dto 만들기
     async vaildateUser(email: string, plainTextPassword: string): Promise<any> {        
-        const user = await this.usersService.getByEmail(email);
+        const user = await this.usersService.getOneBy({ email });
         const verified = await this.verifyPassword(plainTextPassword, user.password);
         if (user && verified) {
             const { password, ...result } = user;
@@ -37,7 +37,7 @@ export class AuthService {
     }
 
     // TODO: user 반환 dto 만들기
-    async signUp(userSignupInfoDto: UserSignupInfoDto): Promise<any> {
+    async signUp(userSignupInfoDto: SignupUserDto): Promise<any> {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(userSignupInfoDto.password, salt);
         try {
