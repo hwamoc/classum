@@ -1,6 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { Content } from 'src/common/content';
-import { Column, Entity, Unique } from 'typeorm';
+import { Column, Entity, OneToMany, Unique } from 'typeorm';
+import { Board } from '../boards/board.entity';
+import { UserToSpace } from '../user-to-space/user-to-space.entity';
 
 @Entity()
 @Unique(['email'])
@@ -25,5 +27,10 @@ export class User extends Content {
     @Exclude()
     currentHashedRefreshToken?: string;
 
+    @OneToMany(type => UserToSpace, userToSpace => userToSpace.user)
+    userToSpaces!: UserToSpace[];
+
+    @OneToMany(type => Board, board => board.user, { eager: true })
+    boards: Board[];
 
 }
