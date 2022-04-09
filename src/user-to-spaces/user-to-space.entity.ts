@@ -1,16 +1,13 @@
-import { User } from 'src/user/user.entity';
 import { Content } from 'src/common/content';
 import { Space } from 'src/spaces/space.entity';
-import { Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { SpaceRole } from '../space-roles/space-role.entity';
+import { User } from 'src/user/user.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity()
 export class UserToSpace extends Content {
 
-    @ManyToOne(type => SpaceRole, spaceRole => spaceRole.userToSpace, { 
-        eager: false,
-    })
-    spaceRole: SpaceRole;
+    @Column()
+    spaceRoleId: number;
 
     @ManyToOne(type => User, user => user.userToSpaces)
     user: User;

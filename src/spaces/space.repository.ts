@@ -1,6 +1,5 @@
-import { RoleType } from "src/space-roles/role-type.enum";
 import { SpaceRole } from "src/space-roles/space-role.entity";
-import { UserToSpace } from "src/user-to-space/user-to-space.entity";
+import { UserToSpace } from "src/user-to-spaces/user-to-space.entity";
 import { User } from "src/user/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { CreateSpaceDto } from "./dto/create-space.dto";
@@ -8,16 +7,11 @@ import { Space } from "./space.entity";
 
 @EntityRepository(Space)
 export class SpaceRepository extends Repository<Space> {
-
-    async createSpace(createBoardDto: CreateSpaceDto, spaceRoles: SpaceRole[], user: User): Promise<Space> {
+    
+    async buildSpace(createBoardDto: CreateSpaceDto, userToSpace: UserToSpace, spaceRoles: SpaceRole[], user: User): Promise<Space> {
         const { title, logoUrl } = createBoardDto;
-        const adminCode: string = Math.random().toString(36).substring(2,10);
-        const participantCode: string = Math.random().toString(36).substring(2,10);
-
-        const userToSpace: UserToSpace = new UserToSpace();
-        const defulatAdminRole: SpaceRole = spaceRoles.find(r => r.roleType === RoleType.ADMIN);
-        userToSpace.spaceRole = defulatAdminRole;
-        userToSpace.user = user;
+        const adminCode: string = await this.getUniqueCode();
+        const participantCode: string = await this.getUniqueCode();
         const userToSpaces: UserToSpace[] = [userToSpace];
 
         const space: Space = this.create({
@@ -29,8 +23,21 @@ export class SpaceRepository extends Repository<Space> {
             userToSpaces,
             spaceRoles
         });
-
-        await this.save(space);
         return space;
+    }
+
+    async getUniqueCode(): Promise<string> {
+        let code: string = Math.random().toString(36).substring(2,10);
+        let unique: boolean = false;
+        while (!unique) {
+            const duplicateAdmin = await this.findOne({ adminCode: code });
+            const duplicateParticipant = await this.findOne({ participantCode: code });
+            if (duplicateAdmin || duplicateParticipant) {
+                code = Math.random().toString(36).substring(2,10);
+                continue;
+            } 
+            unique = true;
+        }
+        return code;
     }
 }

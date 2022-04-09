@@ -2,7 +2,7 @@ import { Exclude } from 'class-transformer';
 import { Content } from 'src/common/content';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import { Board } from '../boards/board.entity';
-import { UserToSpace } from '../user-to-space/user-to-space.entity';
+import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
 
 @Entity()
 @Unique(['email'])

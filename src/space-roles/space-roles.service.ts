@@ -11,7 +11,7 @@ export class SpaceRolesService {
         private spaceRoleRepository: SpaceRoleRepository
     ) {}
 
-    createSpaceRole(createSpaceRoleDtos: CreateSpaceRoleDto[]): Promise<SpaceRole[]> {
-        return this.spaceRoleRepository.createSpaceRole(createSpaceRoleDtos);
+    buildSpaceRoles(createSpaceRoleDtos: CreateSpaceRoleDto[]): SpaceRole[] {
+        return this.spaceRoleRepository.buildSpaceRoles(createSpaceRoleDtos);
     }
 }

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { SpaceRolesModule } from 'src/space-roles/space-roles.module';
+import { UserToSpacesModule } from 'src/user-to-spaces/user-to-spaces.module';
 import { SpaceRepository } from './space.repository';
 import { SpacesController } from './spaces.controller';
 import { SpacesService } from './spaces.service';
@@ -11,6 +12,7 @@ import { SpacesService } from './spaces.service';
     TypeOrmModule.forFeature([SpaceRepository]),
     AuthModule,
     SpaceRolesModule,
+    UserToSpacesModule,
   ],
   controllers: [SpacesController],
   providers: [SpacesService],

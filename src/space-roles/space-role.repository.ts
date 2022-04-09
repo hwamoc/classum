@@ -5,7 +5,7 @@ import { SpaceRole } from './space-role.entity';
 @EntityRepository(SpaceRole)
 export class SpaceRoleRepository extends Repository<SpaceRole> {
 
-    async createSpaceRole(createSpaceRoleDtos: CreateSpaceRoleDto[]): Promise<SpaceRole[]> {
+    buildSpaceRoles(createSpaceRoleDtos: CreateSpaceRoleDto[]): SpaceRole[] {
         const spaceRoles: SpaceRole[] = [];
         for (const spaceRoleDto of createSpaceRoleDtos) {
             const spaceRole: SpaceRole = this.create({
@@ -13,7 +13,6 @@ export class SpaceRoleRepository extends Repository<SpaceRole> {
                 roleType: spaceRoleDto.roleType
             })
             spaceRoles.push(spaceRole);
-            await this.save(spaceRole);
         }
         return spaceRoles;
     }

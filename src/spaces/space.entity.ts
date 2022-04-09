@@ -1,7 +1,7 @@
 import { Content } from "src/common/content";
 import { SpaceRole } from "src/space-roles/space-role.entity";
 import { Column, Entity, OneToMany } from "typeorm";
-import { UserToSpace } from '../user-to-space/user-to-space.entity';
+import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
 
 @Entity()
 export class Space extends Content {
@@ -15,10 +15,10 @@ export class Space extends Content {
     @Column({ nullable: true })
     logoUrl: string;
 
-    @Column()
+    @Column({ unique: true })
     adminCode: string;
 
-    @Column()
+    @Column({ unique: true })
     participantCode: string;
 
     @OneToMany(type => UserToSpace, userToSpace => userToSpace.space, {
@@ -28,8 +28,7 @@ export class Space extends Content {
     userToSpaces!: UserToSpace[];
 
     @OneToMany(type => SpaceRole, spaceRole => spaceRole.space, { 
-        eager: true,
-        // cascade: ["insert", "update", "soft-remove"]
+        cascade: ["insert", "update", "soft-remove"]
     })
     spaceRoles: SpaceRole[];
 }
