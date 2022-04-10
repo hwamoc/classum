@@ -11,9 +11,13 @@ export class UserToSpace extends Content {
     })
     spaceRoleId: number;
 
-    @ManyToOne(type => User, user => user.userToSpaces)
+    @ManyToOne(type => User, user => user.userToSpaces, {
+        onUpdate: 'CASCADE',
+    })
     user: User;
 
-    @ManyToOne(type => Space, space => space.userToSpaces)
+    @ManyToOne(type => Space, space => space.userToSpaces, {
+        onUpdate: 'CASCADE',
+    })
     space: Space;
 }
