@@ -8,7 +8,9 @@ import { Space } from "./space.entity";
 @EntityRepository(Space)
 export class SpaceRepository extends Repository<Space> {
     
-    async buildSpace(createBoardDto: CreateSpaceDto, userToSpace: UserToSpace, spaceRoles: SpaceRole[], user: User): Promise<Space> {
+    async buildSpace(
+        createBoardDto: CreateSpaceDto, userToSpace: UserToSpace, spaceRoles: SpaceRole[], user: User
+    ): Promise<Space> {
         const { title, logoUrl } = createBoardDto;
         const adminCode: string = await this.getUniqueCode();
         const participantCode: string = await this.getUniqueCode();

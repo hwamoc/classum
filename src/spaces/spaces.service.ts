@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RoleType } from 'src/space-roles/role-type.enum';
 import { SpaceRole } from 'src/space-roles/space-role.entity';
 import { User } from 'src/user/user.entity';
+import UtilsService from 'src/utils/utils.service';
 import { getConnection } from 'typeorm';
 import { SpaceRolesService } from '../space-roles/space-roles.service';
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
@@ -17,7 +18,7 @@ export class SpacesService {
         @InjectRepository(SpaceRepository) 
         private spaceRepository: SpaceRepository,
         private spaceRolesService: SpaceRolesService,
-        private userToSpacesService: UserToSpacesService,
+        private utilsService: UtilsService,
     ) {}
 
     async getAllSpaces(
@@ -34,12 +35,16 @@ export class SpacesService {
 
     async createSpace(
         createSpaceDto: CreateSpaceDto, 
+        file: Express.Multer.File,
         user: User, 
     ): Promise<Space> {
         const queryRunner = await getConnection().createQueryRunner();
         await queryRunner.startTransaction();
         try {
-            // 트랜잭션 실행 로직
+            if (file) {
+                const generatedFile: string = this.utilsService.uploadFile(file);
+                createSpaceDto.logoUrl = generatedFile;
+            }
             const userToSpaceTemp: UserToSpace = new UserToSpace();
             userToSpaceTemp.user = user;
             const { createSpaceRoleDtos } = createSpaceDto;
