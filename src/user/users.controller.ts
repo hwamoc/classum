@@ -5,7 +5,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Public } from 'src/skip-auth.decorator';
 import { multerOptions } from 'src/utils/multer-options';
 import UtilsService from 'src/utils/utils.service';
-import { Id } from './model/user-model';
+import { Id } from './model/user.model';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 

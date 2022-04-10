@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import * as config from 'config';
 import { UsersService } from '../user/users.service';
 import { SignupUserDto } from './dto/signup-user.dto';
-import { AuthCookie, RefreshCookie, CookieClearOption } from './model/auth-model';
+import { AuthCookie, RefreshCookie, CookieClearOption } from './model/auth.model';
 
 @Injectable()
 export class AuthService {
