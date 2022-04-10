@@ -22,13 +22,13 @@ export class Space extends Content {
     participantCode: string;
 
     @OneToMany(type => UserToSpace, userToSpace => userToSpace.space, {
-        cascade: ["insert", "update", "soft-remove"]
+        cascade: ["insert", "update", "soft-remove"],
     })
-    // TODO: property 뒤에! 붙는거 다 정리하자
-    userToSpaces!: UserToSpace[];
+
+    userToSpaces: UserToSpace[];
 
     @OneToMany(type => SpaceRole, spaceRole => spaceRole.space, { 
-        cascade: ["insert", "update", "soft-remove"]
+        cascade: ["insert", "update", "soft-remove"],
     })
     spaceRoles: SpaceRole[];
 }

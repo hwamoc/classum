@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { RoleType } from 'src/space-roles/role-type.enum';
 import { SpaceRole } from 'src/space-roles/space-role.entity';
 import { User } from 'src/user/user.entity';
 import { getConnection } from 'typeorm';
@@ -44,14 +45,15 @@ export class SpacesService {
             const { createSpaceRoleDtos } = createSpaceDto;
             const spaceRoles: SpaceRole[] = this.spaceRolesService.buildSpaceRoles(createSpaceRoleDtos);
             const space: Space = await this.spaceRepository.buildSpace(createSpaceDto, userToSpaceTemp, spaceRoles, user);
-            const newSpace = await queryRunner.manager.save(space);
+            const savedSpace = await queryRunner.manager.save(space);
 
-            const userToSpace: UserToSpace = this.userToSpacesService.buildUserToSpace(newSpace.spaceRoles, user);
-            await queryRunner.manager.update(UserToSpace, newSpace.userToSpaces[0].id, { 
-                spaceRoleId: userToSpace.spaceRoleId
-            });
+            const savedSpaceRoles: SpaceRole[]  = await queryRunner.manager.find(SpaceRole, { space: savedSpace });
+            const savedUserToSpace: UserToSpace[] = await queryRunner.manager.find(UserToSpace, { user, space: savedSpace });
+            const defulatAdminRole: SpaceRole = await savedSpaceRoles.find(r => r.roleType === RoleType.ADMIN);
+            await queryRunner.manager.update(UserToSpace, savedUserToSpace[0].id, { spaceRoleId: defulatAdminRole.id });
+
             await queryRunner.commitTransaction();
-            return newSpace;
+            return savedSpace;
         } catch (error) {
             await queryRunner.rollbackTransaction();
             throw new NotFoundException(`Failed createSpace - ${error}`);

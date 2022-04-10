@@ -6,7 +6,9 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 @Entity()
 export class UserToSpace extends Content {
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     spaceRoleId: number;
 
     @ManyToOne(type => User, user => user.userToSpaces)
