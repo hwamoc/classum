@@ -8,22 +8,13 @@ import { UserToSpace } from "./user-to-space.entity";
 @EntityRepository(UserToSpace)
 export class UserToSpaceRepository extends Repository<UserToSpace> {
 
-    createUserToSpace(spaceRoles: SpaceRole[], user: User, space: Space): UserToSpace {
+    createUserToSpace(spaceRole: SpaceRole, user: User, space: Space): UserToSpace {
         const userToSpace: UserToSpace = this.create({
-            spaceRoleId: spaceRoles[0].id,
+            spaceRoleId: spaceRole.id,
             user,
             space
         });
         this.save(userToSpace);
-        return userToSpace;
-    }
-
-    buildUserToSpace(spaceRoles: SpaceRole[], user: User): UserToSpace {
-        const defulatAdminRole: SpaceRole = spaceRoles.find(r => r.roleType === RoleType.ADMIN);
-        const userToSpace: UserToSpace = this.create({
-            spaceRoleId: defulatAdminRole.id,
-            user,
-        });
         return userToSpace;
     }
 }
