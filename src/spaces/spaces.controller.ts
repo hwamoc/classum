@@ -5,6 +5,8 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Public } from 'src/skip-auth.decorator';
 import { User } from 'src/user/user.entity';
 import { multerOptions } from 'src/utils/multer-options';
+import { ParseFormDataJsonPipe } from '../common/pipes/parse-form-data-json.pipe';
+import { CreateSpaceBodyDto } from './dto/create-space-body.dto';
 import { CreateSpaceDto } from './dto/create-space.dto';
 import { Space } from './space.entity';
 import { SpacesService } from './spaces.service';
@@ -25,20 +27,22 @@ export class SpacesController {
     /*
     * Postman으로 Request보낼 때 
     * 1. 로고 파일 포함하는 경우
-    *   - form-data를 선택하고 json의 key 명은 'body'로 설정해야 합니다. (JSON으로 파싱할 때 data.body로 접근함)
+    *   - form-data를 선택하고 json의 key 명은 'data'로 설정합니다.
     * 2. 로고 파일 미포함
-    *   - 보통 요청시와 동일하게 raw로 json을 보내면 됩니다. (Content-Type: application/json)
+    *   - raw/form-data 둘다 가능 (Content-Type: application/json)
     */
     @Post()
-    @UsePipes(ValidationPipe)
     @UseInterceptors(FileInterceptor('file', multerOptions))
     createSpace(
-        @Body() data: any,
-        @UploadedFile() file: Express.Multer.File,
+        @Body(
+            new ParseFormDataJsonPipe({ except: ['file'] }),
+            new ValidationPipe(),
+        ) body: CreateSpaceBodyDto,
+        @UploadedFile() image: Express.Multer.File,
         @GetUser() user: User
     ) {
-        const createSpaceDto: CreateSpaceDto = file ? JSON.parse(data.body) : data
-        return this.spacesService.createSpace(createSpaceDto, file, user);
+        const createSpaceDto: CreateSpaceDto = (body as CreateSpaceBodyDto).data;
+        return this.spacesService.createSpace(createSpaceDto, image, user);
     }
 
     @Get('/:id')
