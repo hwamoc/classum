@@ -1,12 +1,12 @@
 import { Exclude } from 'class-transformer';
-import { Content } from 'src/common/content';
+import { CommonEntity } from 'src/common/common-entity';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import { Board } from '../boards/board.entity';
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
 
 @Entity()
 @Unique(['email'])
-export class User extends Content {
+export class User extends CommonEntity {
 
     @Column()
     firstname: string;
@@ -18,6 +18,7 @@ export class User extends Content {
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @Column({ nullable: true })

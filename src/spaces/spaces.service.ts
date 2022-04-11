@@ -7,7 +7,6 @@ import UtilsService from 'src/utils/utils.service';
 import { getConnection } from 'typeorm';
 import { SpaceRolesService } from '../space-roles/space-roles.service';
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
-import { UserToSpacesService } from '../user-to-spaces/user-to-spaces.service';
 import { CreateSpaceDto } from './dto/create-space.dto';
 import { Space } from './space.entity';
 import { SpaceRepository } from './space.repository';
@@ -35,14 +34,14 @@ export class SpacesService {
 
     async createSpace(
         createSpaceDto: CreateSpaceDto, 
-        file: Express.Multer.File,
+        image: Express.Multer.File,
         user: User, 
     ): Promise<Space> {
         const queryRunner = await getConnection().createQueryRunner();
         await queryRunner.startTransaction();
         try {
-            if (file) {
-                const generatedFile: string = this.utilsService.uploadFile(file);
+            if (image) {
+                const generatedFile: string = this.utilsService.uploadFile(image);
                 createSpaceDto.logoUrl = generatedFile;
             }
             const userToSpaceTemp: UserToSpace = new UserToSpace();

@@ -1,10 +1,10 @@
-import { Content } from "src/common/content";
+import { CommonEntity } from "src/common/common-entity";
 import { SpaceRole } from "src/space-roles/space-role.entity";
 import { Column, Entity, OneToMany } from "typeorm";
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
 
 @Entity()
-export class Space extends Content {
+export class Space extends CommonEntity {
 
     @Column()
     founderId: number;
@@ -24,7 +24,6 @@ export class Space extends Content {
     @OneToMany(type => UserToSpace, userToSpace => userToSpace.space, {
         cascade: ["insert", "update", "soft-remove"],
     })
-
     userToSpaces: UserToSpace[];
 
     @OneToMany(type => SpaceRole, spaceRole => spaceRole.space, { 

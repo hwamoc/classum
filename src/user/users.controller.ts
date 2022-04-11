@@ -29,9 +29,9 @@ export class UsersController {
     @UseInterceptors(FileInterceptor('file', multerOptions))
     updateProfile(
         @GetUser() user: User,
-        @UploadedFile() file: Express.Multer.File,
+        @UploadedFile() image: Express.Multer.File,
     ): Promise<void> {
-        return this.usersService.updateProfile(user, file);
+        return this.usersService.updateProfile(user, image);
         // TODO: 응답 형태 통일
     }
 }

@@ -51,8 +51,8 @@ export class UsersService {
         });
     }
 
-    async updateProfile(user: User, file: Express.Multer.File) {
-        const generatedFile: string = this.utilsService.uploadFile(file);
+    async updateProfile(user: User, image: Express.Multer.File) {
+        const generatedFile: string = this.utilsService.uploadFile(image);
         const { affected } = await this.userRepository.update(user.id, {
             profileUrl: generatedFile,
         });
