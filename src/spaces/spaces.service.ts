@@ -74,8 +74,8 @@ export class SpacesService {
                 .subQuery()
                 .from(UserToSpace, 'uts')
                 .innerJoin(SpaceRole, 'sr', 'uts.spaceRoleId = sr.id')
-                .where('uts.userId = :id', { id: user.id })
                 .select([
+                    'uts.userId     AS userId',
                     'uts.spaceId    AS spaceId',
                     'uts.id         AS userToSpaceId',
                     'sr.id          AS spaceRoleId',
@@ -85,8 +85,9 @@ export class SpacesService {
                 .getQuery();
 
         const space = await this.spaceRepository.createQueryBuilder('s')
-                .where('s.id = :id', { id })
                 .innerJoinAndSelect(userRoleQb, 'ur', 'ur.spaceId = s.id')
+                .where('s.id = :id', { id })
+                .andWhere('userId = :userId', { userId: user.id })
                 .select([
                     's.id               AS id',
                     's.title            AS title',
@@ -95,7 +96,7 @@ export class SpacesService {
                 ])
                 .getRawOne();
 
-        this.usersService.setCurrentRoleType(space.roleType, user.id);
+        this.usersService.setCurrentRoleType(space?.roleType, user.id);
 
         return space;
     }
