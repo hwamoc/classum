@@ -1,21 +1,38 @@
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import { RoleType } from 'src/space-roles/role-type.enum';
+import { User } from 'src/user/user.entity';
+import { EntityManager, getManager } from 'typeorm';
 import { PostStatus } from '../model/post-status.enum';
 import { PostType } from '../model/post-type.enum';
 
-@ValidatorConstraint({ name: 'PostStatusValidation', async: false })
+@ValidatorConstraint({ name: 'PostStatusValidation', async: true })
 export class PostStatusValidation implements ValidatorConstraintInterface {
+    constructor(
+        private entityManager: EntityManager,
+    ) {
+        this.entityManager = getManager();
+    }
 
     readonly StatusOptions = [
         PostStatus.PRIVATE,
         PostStatus.PUBLIC
     ]
 
-    validate(value: any, args: ValidationArguments) {
+    async validate(value: any, args: ValidationArguments) {
         const type: string = JSON.parse(JSON.stringify(args.object)).postType?.toUpperCase();
         const status: string = value?.toUpperCase();
-        if (PostType[type] === PostType.QUESTION && this.isStatusValid(status)) {
-            return true;             
-        } else if (PostType[type] === PostType.NOTICE && !status) {
+
+        const id: number = JSON.parse(JSON.stringify(args.object)).userId;
+        const role: string = await this.getUserRole(id);
+
+        if (PostType[type] === PostType.QUESTION && this.isStatusValid(status)) {       // 게시글이 타입이 질문인 경우, 익명 또는 공개 상태로 작성할 수 있다.
+            if (PostStatus[status] === PostStatus.PRIVATE && RoleType[role] === RoleType.PARTICIPANT) {    // 사용자의 역할이 참여자일 경우만 익명으로 작성할 수 있다.
+                return true;
+            } else if (PostStatus[status] === PostStatus.PUBLIC) {
+                return true;
+            }
+            return false;
+        } else if (PostType[type] === PostType.NOTICE && !status) { 
             return true;
         }
         return false;
@@ -26,6 +43,15 @@ export class PostStatusValidation implements ValidatorConstraintInterface {
         return index !== -1;
     }
 
+    private async getUserRole(id: number): Promise<string> {
+        const user: User = await this.entityManager.createQueryBuilder()
+                .from(User, 'u')
+                .where('u.id = :id', { id })
+                .select(['u.currentRole'])
+                .getOne();
+        return user.currentRole;
+    }
+
     defaultMessage(args: ValidationArguments) {
         const type: string = JSON.parse(JSON.stringify(args.object)).postType?.toUpperCase();
         const status: string = JSON.parse(JSON.stringify(args.object)).status;
@@ -33,9 +59,9 @@ export class PostStatusValidation implements ValidatorConstraintInterface {
             if (!status) {
                 return 'Status is required. [status option: private, public]';
             } 
-            return 'There is two post status options: private, public.';
+            return `There is two post status options: private, public. Admin can't select private.`;
         } else if (PostType[type] === PostType.NOTICE) {
-            return `If post type is notice, don't need to enter post status.`;
+            return `If post type is notice, don't enter post status.`;
         } else {
             return 'Post type is required.';
         }

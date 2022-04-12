@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length, Validate } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, Length, Validate } from "class-validator";
 import { PostStatusValidation } from "../validation/post-status-validation";
 import { PostTypeValidation } from "../validation/post-type-validation";
 
@@ -14,6 +14,10 @@ export class CreatePostDto {
 
     @IsString()
     content: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    userId: number;
 
     @Validate(PostStatusValidation)
     status: string;
