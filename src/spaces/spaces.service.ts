@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RoleType } from 'src/space-roles/role-type.enum';
 import { SpaceRole } from 'src/space-roles/space-role.entity';
 import { User } from 'src/user/user.entity';
+import { UsersService } from 'src/user/users.service';
 import { UtilsService } from 'src/utils/utils.service';
-import { getConnection } from 'typeorm';
+import { getConnection, getManager } from 'typeorm';
 import { SpaceRolesService } from '../space-roles/space-roles.service';
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
 import { CreateSpaceDto } from './dto/create-space.dto';
@@ -17,19 +18,19 @@ export class SpacesService {
         @InjectRepository(SpaceRepository) 
         private spaceRepository: SpaceRepository,
         private spaceRolesService: SpaceRolesService,
+        private usersService: UsersService,
         private utilsService: UtilsService,
     ) {}
 
     async getAllSpaces(
         user: User
     ): Promise<Space[]> {
-        const query = this.spaceRepository.createQueryBuilder('space');
-        // 내가 참여하는 공간 가져오기
-        // query.where('space.userId = :userId', { userId: user.id });
+        const mySpaces: Space[] = await this.spaceRepository.createQueryBuilder('s')
+                .innerJoin(UserToSpace, 'uts', 'uts.space = s.id')
+                .where('uts.userId = :id', { id: user.id })
+                .getMany();
 
-        const spaces = await query.getMany();
-
-        return spaces;
+        return mySpaces;
     }
 
     async createSpace(
@@ -53,7 +54,7 @@ export class SpacesService {
 
             const savedSpaceRoles: SpaceRole[]  = await queryRunner.manager.find(SpaceRole, { space: savedSpace });
             const savedUserToSpace: UserToSpace[] = await queryRunner.manager.find(UserToSpace, { user, space: savedSpace });
-            const defulatAdminRole: SpaceRole = await savedSpaceRoles.find(r => r.roleType === RoleType.ADMIN);
+                const defulatAdminRole: SpaceRole = await savedSpaceRoles.find(r => r.roleType === RoleType.ADMIN);
             await queryRunner.manager.update(UserToSpace, savedUserToSpace[0].id, { spaceRoleId: defulatAdminRole.id });
 
             await queryRunner.commitTransaction();
@@ -64,6 +65,39 @@ export class SpacesService {
         } finally {
             await queryRunner.release();
         }
+    }
+
+    async getSpace(id: number, user: User): Promise<Space> {
+        const manager = getManager();
+
+        const userRoleQb = await manager.createQueryBuilder()
+                .subQuery()
+                .from(UserToSpace, 'uts')
+                .innerJoin(SpaceRole, 'sr', 'uts.spaceRoleId = sr.id')
+                .where('uts.userId = :id', { id: user.id })
+                .select([
+                    'uts.spaceId    AS spaceId',
+                    'uts.id         AS userToSpaceId',
+                    'sr.id          AS spaceRoleId',
+                    'sr.roleName    AS roleName',
+                    'sr.roleType    AS roleType'
+                ])
+                .getQuery();
+
+        const space = await this.spaceRepository.createQueryBuilder('s')
+                .where('s.id = :id', { id })
+                .innerJoinAndSelect(userRoleQb, 'ur', 'ur.spaceId = s.id')
+                .select([
+                    's.id               AS id',
+                    's.title            AS title',
+                    's.logoUrl          AS logoUrl',
+                    'ur.*'
+                ])
+                .getRawOne();
+
+        this.usersService.setCurrentRoleType(space.roleType, user.id);
+
+        return space;
     }
 
     async getSpaceById(id: number): Promise<Space> {

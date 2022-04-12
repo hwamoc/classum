@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Public } from 'src/skip-auth.decorator';
 import { User } from 'src/user/user.entity';
 import { multerImageOptions } from 'src/utils/multer-options';
 import { ParseFormDataJsonPipe } from '../common/pipes/parse-form-data-json.pipe';
@@ -16,9 +15,8 @@ import { SpacesService } from './spaces.service';
 export class SpacesController {
     constructor(private spacesService: SpacesService) {}
 
-    @Get('/')
-    @Public() //테스트 끝나고 지워야 해
-    getAllSpace(
+    @Get()
+    getAllSpaces(
         @GetUser() user: User
     ): Promise<Space[]> {
         return this.spacesService.getAllSpaces(user);
@@ -46,8 +44,11 @@ export class SpacesController {
     }
 
     @Get('/:id')
-    getSpaceById(@Param('id', ParseIntPipe) id: number): Promise<Space> {
-        return this.spacesService.getSpaceById(id);
+    getSpace(
+        @Param('id', ParseIntPipe) id: number,
+        @GetUser() user: User,
+    ): Promise<Space> {
+        return this.spacesService.getSpace(id, user);
     }
 
     // @Post('/logo')

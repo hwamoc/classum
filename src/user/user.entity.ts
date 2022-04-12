@@ -1,5 +1,5 @@
-import { Exclude } from 'class-transformer';
 import { CommonEntity } from 'src/common/common-entity';
+import { RoleType } from 'src/space-roles/role-type.enum';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import { Board } from '../boards/board.entity';
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
@@ -35,4 +35,6 @@ export class User extends CommonEntity {
     @OneToMany(type => Board, board => board.user, { eager: true })
     boards: Board[];
 
+    @Column()
+    currentRole: RoleType;
 }

@@ -6,6 +6,7 @@ import { UtilsService } from 'src/utils/utils.service';
 import { Email, Id } from './model/user.model';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
+import { RoleType } from '../space-roles/role-type.enum';
 
 @Injectable()
 export class UsersService {
@@ -55,13 +56,18 @@ export class UsersService {
         await this.userRepository.update(id, { currentHashedRefreshToken });
     }
 
+    async setCurrentRoleType(currentRole: RoleType, id: number) {
+        await this.userRepository.update(id, { currentRole});
+    }
+
     async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
-        const user = await this.getOneBy({ id });
-    
-        const isRefreshTokenMatching = await bcrypt.compare(refreshToken, user.currentHashedRefreshToken);
+        const user = await this.getOnePrivateInfo({ id });
+
+        const isRefreshTokenMatching = await bcrypt.compare(refreshToken, user?.currentHashedRefreshToken);
+        const { currentHashedRefreshToken, password, ...result } = user;
     
         if (isRefreshTokenMatching) {
-            return user;
+            return result;
         }
     }
 
