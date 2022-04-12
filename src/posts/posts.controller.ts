@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, UploadedFiles, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ParseFormDataJsonPipe } from 'src/common/pipes/parse-form-data-json.pipe';
 import { User } from 'src/user/user.entity';

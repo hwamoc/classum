@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/user/user.entity';
 import { CreateUserToSpaceDto } from './dto/create-user-to-space.dto';

@@ -5,7 +5,7 @@ import { UsersService } from 'src/user/users.service';
 import { User } from '../user/user.entity';
 import { AuthService } from './auth.service';
 import { SignupUserDto } from './dto/signup-user.dto';
-import { GetUser } from './get-user.decorator';
+import { GetUser } from './decorator/get-user.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';

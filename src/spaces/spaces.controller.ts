@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/user/user.entity';
 import { multerImageOptions } from 'src/utils/multer-options';
