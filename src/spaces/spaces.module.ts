@@ -17,5 +17,6 @@ import { SpacesService } from './spaces.service';
   ],
   controllers: [SpacesController],
   providers: [SpacesService, UtilsService],
+  exports: [SpacesService],
 })
 export class SpacesModule {}
