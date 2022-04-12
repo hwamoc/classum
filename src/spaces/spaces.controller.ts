@@ -4,7 +4,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Public } from 'src/skip-auth.decorator';
 import { User } from 'src/user/user.entity';
-import { multerOptions } from 'src/utils/multer-options';
+import { multerImageOptions } from 'src/utils/multer-options';
 import { ParseFormDataJsonPipe } from '../common/pipes/parse-form-data-json.pipe';
 import { CreateSpaceBodyDto } from './dto/create-space-body.dto';
 import { CreateSpaceDto } from './dto/create-space.dto';
@@ -32,7 +32,7 @@ export class SpacesController {
     *   - raw/form-data 둘다 가능 (Content-Type: application/json)
     */
     @Post()
-    @UseInterceptors(FileInterceptor('file', multerOptions))
+    @UseInterceptors(FileInterceptor('file', multerImageOptions))
     createSpace(
         @Body(
             new ParseFormDataJsonPipe({ except: ['file'] }),

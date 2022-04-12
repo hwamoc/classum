@@ -41,7 +41,7 @@ export class SpacesService {
         await queryRunner.startTransaction();
         try {
             if (image) {
-                const generatedFile: string = this.utilsService.uploadFile(image);
+                const generatedFile: string = this.utilsService.getFileUrl(image);
                 createSpaceDto.logoUrl = generatedFile;
             }
             const userToSpaceTemp: UserToSpace = new UserToSpace();
