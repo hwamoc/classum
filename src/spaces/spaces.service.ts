@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RoleType } from 'src/space-roles/role-type.enum';
 import { SpaceRole } from 'src/space-roles/space-role.entity';
 import { User } from 'src/user/user.entity';
-import UtilsService from 'src/utils/utils.service';
+import { UtilsService } from 'src/utils/utils.service';
 import { getConnection } from 'typeorm';
 import { SpaceRolesService } from '../space-roles/space-roles.service';
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';

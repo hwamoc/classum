@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { SignupUserDto } from 'src/auth/dto/signup-user.dto';
-import UtilsService from 'src/utils/utils.service';
+import { UtilsService } from 'src/utils/utils.service';
 import { Email, Id } from './model/user.model';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';

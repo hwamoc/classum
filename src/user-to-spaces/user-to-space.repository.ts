@@ -1,4 +1,3 @@
-import { RoleType } from "src/space-roles/role-type.enum";
 import { SpaceRole } from "src/space-roles/space-role.entity";
 import { Space } from "src/spaces/space.entity";
 import { User } from "src/user/user.entity";
