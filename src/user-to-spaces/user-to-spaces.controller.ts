@@ -3,6 +3,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/user/user.entity';
 import { CreateUserToSpaceDto } from './dto/create-user-to-space.dto';
+import { UserToSpace } from './user-to-space.entity';
 import { UserToSpacesService } from './user-to-spaces.service';
 
 @Controller('spaces/user-to-spaces')
@@ -15,7 +16,7 @@ export class UserToSpacesController {
     createUserToSpace(
         @Body() createUserToSpaceDto: CreateUserToSpaceDto,
         @GetUser() user: User
-    ) {
+    ): Promise<UserToSpace> {
         return this.userToSpacesService.createUserToSpace(createUserToSpaceDto, user);
     }
 }

@@ -13,12 +13,12 @@ export class AuthService {
         private usersService: UsersService,
     ) {}
 
-    // TODO: password 없는 user dto 만들기
     async vaildateUser(email: string, plainTextPassword: string): Promise<any> {        
-        const user = await this.usersService.getOneBy({ email });
+        const user = await this.usersService.getOnePrivateInfo({ email });
+
         const verified = await this.verifyPassword(plainTextPassword, user.password);
         if (user && verified) {
-            const { password, ...result } = user;
+            const { password, currentHashedRefreshToken, ...result } = user;
             return result;
         } else {
             throw new BadRequestException('Wrong credentials provided');
@@ -36,7 +36,6 @@ export class AuthService {
         return isPasswordMatch;
     }
 
-    // TODO: user 반환 dto 만들기
     async signUp(userSignupInfoDto: SignupUserDto): Promise<any> {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(userSignupInfoDto.password, salt);

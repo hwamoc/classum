@@ -29,6 +29,26 @@ export class UsersService {
         return user;
     }
 
+    async getOnePrivateInfo(param: Id | Email): Promise<User> {
+        let user: User;
+        if ((param as Id).id) {
+            user = await this.userRepository.createQueryBuilder('u')
+            .select(['u.id', 'u.password', 'u.firstname', 'u.lastname', 'u.email', 'u.profileUrl', 'u.currentHashedRefreshToken', 'u.createdAt', 'u.updatedAt'])
+            .where('u.id = :id', { id: (param as Id).id })
+            .getOne();
+        } else if ((param as Email).email) {
+            user = await this.userRepository.createQueryBuilder('u')
+            .select(['u.id', 'u.password', 'u.firstname', 'u.lastname', 'u.email', 'u.profileUrl', 'u.currentHashedRefreshToken', 'u.createdAt', 'u.updatedAt'])
+            .where('u.email = :email', { email: (param as Email).email})
+            .getOne();
+        }
+
+        if (!user) {
+            throw new NotFoundException(`User with this ${Object.keys(param)}: ${Object.values(param)} does not exist`);
+        }
+        return user;
+    }
+
     async setCurrentRefreshToken(refreshToken: string, id: number) {
         const salt = await bcrypt.genSalt();
         const currentHashedRefreshToken = await bcrypt.hash(refreshToken, salt);

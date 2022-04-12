@@ -6,6 +6,7 @@ import { Space } from 'src/spaces/space.entity';
 import { User } from 'src/user/user.entity';
 import { Brackets, getManager } from 'typeorm';
 import { CreateUserToSpaceDto } from './dto/create-user-to-space.dto';
+import { UserToSpace } from './user-to-space.entity';
 import { UserToSpaceRepository } from './user-to-space.repository';
 
 @Injectable()
@@ -15,7 +16,7 @@ export class UserToSpacesService {
         private userToSpaceRepository: UserToSpaceRepository
     ) {}
 
-    async createUserToSpace(createUserToSpaceDto: CreateUserToSpaceDto, user: User) {
+    async createUserToSpace(createUserToSpaceDto: CreateUserToSpaceDto, user: User): Promise<UserToSpace> {
         const entityManager = getManager();
         const { code } = createUserToSpaceDto;
         const space: Space = await this.validateCode(code, user);

@@ -4,9 +4,8 @@ export class AuthCookie {
     path: string =  '/';
     httpOnly: boolean = true;
     maxAge: number;
-    constructor(param: any) {
-        this.accessToken = param.accessToken;
-        this.maxAge = param.maxAge;
+    constructor(partial: Partial<AuthCookie>) {
+        Object.assign(this, partial);
     }
 }
 

@@ -16,10 +16,16 @@ export class Space extends CommonEntity {
     @Column({ nullable: true })
     logoUrl: string;
 
-    @Column({ unique: true })
+    @Column({ 
+        unique: true,
+        select: false,
+    })
     adminCode: string;
 
-    @Column({ unique: true })
+    @Column({ 
+        unique: true,
+        select: false, 
+    })
     participantCode: string;
 
     @OneToMany(type => UserToSpace, userToSpace => userToSpace.space, {

@@ -17,15 +17,16 @@ export class User extends CommonEntity {
     @Column()
     email: string;
 
-    @Column()
-    @Exclude()
+    @Column({ select: false })
     password: string;
 
     @Column({ nullable: true })
     profileUrl: string;
 
-    @Column({ nullable: true })
-    @Exclude()
+    @Column({ 
+        nullable: true,
+        select: false,
+    })
     currentHashedRefreshToken?: string;
 
     @OneToMany(type => UserToSpace, userToSpace => userToSpace.user)
