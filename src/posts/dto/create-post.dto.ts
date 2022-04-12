@@ -3,7 +3,6 @@ import { PostStatusValidation } from "../validation/post-status-validation";
 import { PostTypeValidation } from "../validation/post-type-validation";
 
 export class CreatePostDto {
-    @IsString()
     @IsNotEmpty({ message: 'The postType is required' })
     @Validate(PostTypeValidation)
     postType: string;

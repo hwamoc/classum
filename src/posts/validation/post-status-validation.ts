@@ -12,7 +12,7 @@ export class PostStatusValidation implements ValidatorConstraintInterface {
 
     validate(value: any, args: ValidationArguments) {
         const type: string = JSON.parse(JSON.stringify(args.object)).postType?.toUpperCase();
-        const status: string = JSON.parse(JSON.stringify(args.object)).status?.toUpperCase();
+        const status: string = value?.toUpperCase();
         if (PostType[type] === PostType.QUESTION && this.isStatusValid(status)) {
             return true;             
         } else if (PostType[type] === PostType.NOTICE && !status) {

@@ -9,6 +9,9 @@ import { SpacesModule } from './spaces/spaces.module';
 import { UsersModule } from './user/users.module';
 import { UtilsModule } from './utils/utils.module';
 import { SpaceRolesModule } from './space-roles/space-roles.module';
+import { UserToSpacesModule } from './user-to-spaces/user-to-spaces.module';
+import { PostsModule } from './posts/posts.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -19,6 +22,9 @@ import { SpaceRolesModule } from './space-roles/space-roles.module';
     UsersModule,
     SpacesModule,
     SpaceRolesModule,
+    UserToSpacesModule,
+    PostsModule,
+    FilesModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })

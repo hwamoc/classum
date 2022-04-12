@@ -10,7 +10,7 @@ export class PostTypeValidation implements ValidatorConstraintInterface {
     ]
 
     validate(value: any, args: ValidationArguments) {
-        const postType: PostType = JSON.parse(JSON.stringify(args.object)).postType?.toUpperCase();
+        const postType: PostType = value?.toUpperCase();
         if (this.isTypeValid(postType)) {
             return true;             
         }
