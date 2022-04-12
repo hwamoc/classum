@@ -35,6 +35,6 @@ export class User extends CommonEntity {
     @OneToMany(type => Board, board => board.user, { eager: true })
     boards: Board[];
 
-    @Column()
+    @Column({ nullable: true })
     currentRole: RoleType;
 }
