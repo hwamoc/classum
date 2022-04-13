@@ -17,6 +17,9 @@ import { SpacesService } from './spaces.service';
 export class SpacesController {
     constructor(private spacesService: SpacesService) {}
 
+    /*
+    * 내가 속한 모든 공간 가져오기
+    */
     @Get()
     getAllSpaces(
         @GetUser() user: User
@@ -40,7 +43,7 @@ export class SpacesController {
         ) body: CreateSpaceBodyDto,
         @UploadedFile() image: Express.Multer.File,
         @GetUser() user: User
-    ) {
+    ): Promise<Space> {
         const createSpaceDto: CreateSpaceDto = (body as CreateSpaceBodyDto).data;
         return this.spacesService.createSpace(createSpaceDto, image, user);
     }
@@ -66,7 +69,7 @@ export class SpacesController {
     @Delete('/:id')
     deleteSpace(
         @Param('id', SpaceOwnerValidationPipe) id: number,
-    ): Promise<void> {
+    ): Promise<string> {
         return this.spacesService.deleteSpace(id);
     }
 }

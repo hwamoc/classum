@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleType } from 'src/space-roles/role-type.enum';
 import { SpaceRole } from 'src/space-roles/space-role.entity';
@@ -6,7 +6,6 @@ import { User } from 'src/user/user.entity';
 import { UsersService } from 'src/user/users.service';
 import { UtilsService } from 'src/utils/utils.service';
 import { getConnection, getManager } from 'typeorm';
-import { SpaceRolesService } from '../space-roles/space-roles.service';
 import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
 import { CreateSpaceDto } from './dto/create-space.dto';
 import { Space } from './space.entity';
@@ -17,7 +16,6 @@ export class SpacesService {
     constructor(
         @InjectRepository(SpaceRepository) 
         private spaceRepository: SpaceRepository,
-        private spaceRolesService: SpaceRolesService,
         private usersService: UsersService,
         private utilsService: UtilsService,
     ) {}
@@ -47,8 +45,16 @@ export class SpacesService {
             }
             const userToSpaceTemp: UserToSpace = new UserToSpace();
             userToSpaceTemp.user = user;
+
             const { createSpaceRoleDtos } = createSpaceDto;
-            const spaceRoles: SpaceRole[] = this.spaceRolesService.buildSpaceRoles(createSpaceRoleDtos);
+            const spaceRoles: SpaceRole[] = [];
+            for (const spaceRoleDto of createSpaceRoleDtos) {
+                const spaceRole: SpaceRole = new SpaceRole();
+                spaceRole.roleName = spaceRoleDto.roleName;
+                spaceRole.roleType = spaceRoleDto.roleType;
+                spaceRoles.push(spaceRole);
+            }
+
             const space: Space = await this.spaceRepository.buildSpace(createSpaceDto, userToSpaceTemp, spaceRoles, user);
             const savedSpace = await queryRunner.manager.save(space);
 
@@ -97,7 +103,7 @@ export class SpacesService {
                 .getRawOne();
 
         if (!space) {
-            throw new BadRequestException(`Can't find space with space id: ${id} and user id: ${user.id}`);
+            throw new NotFoundException(`Can't find space with space id: ${id} and user id: ${user.id}`);
         }
 
         this.usersService.setCurrentRoleType(space?.roleType, user.id);
@@ -114,10 +120,11 @@ export class SpacesService {
         return found;
     }
 
-    async deleteSpace(id: number): Promise<void> {
+    async deleteSpace(id: number): Promise<string> {
         const result = await this.spaceRepository.softDelete({ id });
         if (result.affected === 0) {
             throw new NotFoundException(`Can't delete Space with id ${id}`);
         }
+        return 'successfully deleted';
     }
 }
