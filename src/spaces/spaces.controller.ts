@@ -1,13 +1,10 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
-import { Roles } from 'src/auth/decorator/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/role.guard';
 import { User } from 'src/user/user.entity';
 import { multerImageOptions } from 'src/utils/multer-options';
 import { ParseFormDataJsonPipe } from '../common/pipes/parse-form-data-json.pipe';
-import { RoleType } from '../space-roles/role-type.enum';
 import { CreateSpaceBodyDto } from './dto/create-space-body.dto';
 import { CreateSpaceDto } from './dto/create-space.dto';
 import { SpaceOwnerValidationPipe } from './pipes/space-owner-validation.pipe';
@@ -67,12 +64,9 @@ export class SpacesController {
     // }
 
     @Delete('/:id')
-    @Roles(RoleType.ADMIN)
-    @UseGuards(RolesGuard)
     deleteSpace(
         @Param('id', SpaceOwnerValidationPipe) id: number,
-        @GetUser() user: User
     ): Promise<void> {
-        return this.spacesService.deleteSpace(id, user);
+        return this.spacesService.deleteSpace(id);
     }
 }
