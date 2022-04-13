@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { CommonEntity } from 'src/common/common-entity';
 import { RoleType } from 'src/space-roles/role-type.enum';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
@@ -16,6 +16,7 @@ export class User extends CommonEntity {
     lastname: string;
 
     @Column()
+    @Exclude()
     email: string;
 
     @Column()
@@ -39,4 +40,9 @@ export class User extends CommonEntity {
 
     @Column({ nullable: true })
     currentRole: RoleType;
+
+    @Expose()
+    get fullname(): string {
+        return `${this.firstname} ${this.lastname}`;
+    }
 }
