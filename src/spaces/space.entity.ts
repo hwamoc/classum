@@ -9,7 +9,7 @@ import { UserToSpace } from '../user-to-spaces/user-to-space.entity';
 export class Space extends CommonEntity {
 
     @Column()
-    founderId: number;
+    ownerId: number;
 
     @Column()
     title: string;

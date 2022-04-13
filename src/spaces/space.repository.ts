@@ -17,7 +17,7 @@ export class SpaceRepository extends Repository<Space> {
         const userToSpaces: UserToSpace[] = [userToSpace];
 
         const space: Space = this.create({
-            founderId: user.id, 
+            ownerId: user.id, 
             title,
             logoUrl,
             adminCode,

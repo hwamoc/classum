@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleType } from 'src/space-roles/role-type.enum';
 import { SpaceRole } from 'src/space-roles/space-role.entity';
@@ -96,8 +96,11 @@ export class SpacesService {
                 ])
                 .getRawOne();
 
-        this.usersService.setCurrentRoleType(space?.roleType, user.id);
+        if (!space) {
+            throw new BadRequestException(`Can't find space with space id: ${id} and user id: ${user.id}`);
+        }
 
+        this.usersService.setCurrentRoleType(space?.roleType, user.id);
         return space;
     }
 
@@ -111,11 +114,10 @@ export class SpacesService {
         return found;
     }
 
-    // 생성자만 공간을 삭제할 수 있다.
-    async deleteSpace(id: number, user: User): Promise<void> {
-        // const result = await this.spaceRepository.softDelete({ id, user });
-        // if (result.affected === 0) {
-            // throw new NotFoundException(`Can't find Space with id ${id}`);
-        // }
+    async deleteSpace(id: number): Promise<void> {
+        const result = await this.spaceRepository.softDelete({ id });
+        if (result.affected === 0) {
+            throw new NotFoundException(`Can't delete Space with id ${id}`);
+        }
     }
 }
