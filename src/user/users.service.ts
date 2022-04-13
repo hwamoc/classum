@@ -56,8 +56,8 @@ export class UsersService {
         await this.userRepository.update(id, { currentHashedRefreshToken });
     }
 
-    async setCurrentRoleType(currentRole: RoleType, id: number) {
-        await this.userRepository.update(id, { currentRole});
+    async setCurrentSpaceNRole(currentSpaceId: number, currentRole: RoleType, id: number) {
+        await this.userRepository.update(id, { currentSpaceId, currentRole });
     }
 
     async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {

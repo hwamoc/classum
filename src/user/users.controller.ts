@@ -2,14 +2,13 @@ import { ClassSerializerInterceptor, Controller, Get, Param, ParseIntPipe, Post,
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Public } from 'src/skip-auth.decorator';
+import { RoleType } from 'src/space-roles/role-type.enum';
 import { multerImageOptions } from 'src/utils/multer-options';
-import { UtilsService } from 'src/utils/utils.service';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 export class UsersController {
     authService: any;
@@ -23,8 +22,6 @@ export class UsersController {
     ): Promise<User> {
         return this.usersService.getOneBy({ id });
     }
-
-
 
     @Post('/profile')
     @UseInterceptors(FileInterceptor('file', multerImageOptions))

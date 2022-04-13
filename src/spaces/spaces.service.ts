@@ -106,7 +106,7 @@ export class SpacesService {
             throw new NotFoundException(`Can't find space with space id: ${id} and user id: ${user.id}`);
         }
 
-        this.usersService.setCurrentRoleType(space?.roleType, user.id);
+        this.usersService.setCurrentSpaceNRole(space?.id, space?.roleType, user.id);
         return space;
     }
 

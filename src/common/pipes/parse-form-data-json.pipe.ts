@@ -18,8 +18,6 @@ export class ParseFormDataJsonPipe implements PipeTransform {
         }
         const deserializedValue = deepParseJson(value);
         console.log(`deserializedValue`, deserializedValue);
-        console.log(`originProperties`, originProperties);
-        // return deserializedValue;
         return { ...deserializedValue, ...originProperties };
     }
 }
