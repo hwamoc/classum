@@ -7,6 +7,10 @@ export class CreatePostDto {
     @Validate(PostTypeValidation)
     postType: string;
 
+    @IsNumber()
+    @IsNotEmpty()
+    userId: number;
+
     @IsString()
     @IsNotEmpty({ message: 'The title is required' })
     @Length(1, 50, { message: 'There must be 1 to 50 chars in the string' })
@@ -14,10 +18,6 @@ export class CreatePostDto {
 
     @IsString()
     content: string;
-
-    @IsNumber()
-    @IsNotEmpty()
-    userId: number;
 
     @Validate(PostStatusValidation)
     status: string;
