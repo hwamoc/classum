@@ -56,4 +56,11 @@ export class PostsService {
         return post;
     }
 
+    async deletePost(id: number): Promise<string> {
+        const result = await this.postRepository.softDelete({ id });
+        if (result.affected === 0) {
+            throw new NotFoundException(`Can't delete post with id: ${id}`);
+        }
+        return 'successfully deleted';
+    }
 }

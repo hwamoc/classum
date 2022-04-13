@@ -20,7 +20,7 @@ export class PostEntity extends CommonEntity {
     @Expose({
         groups: [RoleType.ADMIN] 
     })
-    username: string;
+    userName: string;
 
     @Column()
     title: string;

@@ -2,8 +2,9 @@ import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Parse
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { Roles } from 'src/auth/decorator/roles.decorator';
+import { Self } from 'src/auth/decorator/self.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/role.guard';
+import { SelfGuard } from 'src/auth/guards/self.guard';
 import { RoleSanitizeInterceptor } from 'src/common/interceptors/role-sanitize.interceptor';
 import { ParseFormDataJsonPipe } from 'src/common/pipes/parse-form-data-json.pipe';
 import { RoleType } from 'src/space-roles/role-type.enum';
@@ -14,15 +15,14 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostEntity } from './post.entity';
 import { PostsService } from './posts.service';
 
-@Controller('spaces')
 @UseInterceptors(ClassSerializerInterceptor)
+@Controller('spaces')
 @UseGuards(JwtAuthGuard)
 export class PostsController {
     constructor(private postsService: PostsService) {}
 
     @Get('/:spaceId/posts')
     @UseInterceptors(RoleSanitizeInterceptor)
-    @UseGuards(RolesGuard)
     getAllPosts(
         @Param('spaceId', ParseIntPipe) spaceId: number,
         @GetUser() user: User
@@ -40,7 +40,7 @@ export class PostsController {
         @Body(
             new ParseFormDataJsonPipe({ except: ['files', 'images'] }),
             new ValidationPipe(),
-        ) body: CreatePostBodyDto,
+        ) body: CreatePostBodyDto, // dto의 userId는 작성자 아이디를 의미하며, 익명 글 작성 여부 판별에 사용된다.
         @UploadedFiles() files: { images?: Express.Multer.File[], anyFiles?: Express.Multer.File[] },
         @GetUser() user: User
     ): Promise<PostEntity> {
@@ -50,7 +50,6 @@ export class PostsController {
 
     @Get('/:spaceId/posts/:id')
     @UseInterceptors(RoleSanitizeInterceptor)
-    @UseGuards(RolesGuard)
     getPost(
         @Param('id', ParseIntPipe) id: number,
     ): Promise<PostEntity> {
@@ -58,13 +57,13 @@ export class PostsController {
     }
 
     @Delete('/:spaceId/posts/:id')
+    @Self({userIDParam: 'writerId', allowAdmins: true})
     @Roles(RoleType.ADMIN)
-    @UseGuards(RolesGuard)
+    @UseGuards(SelfGuard)
     deletePost(
-        @Param('spaceId', ParseIntPipe) spaceId: number,
         @Param('id', ParseIntPipe) id: number,
-        @GetUser() user: User
-    ): Promise<void> {
-        return this.postsService.deletePost(spaceId, id, user);
+        @Param('writerId') writerId: number,  // 작성자 id, SelfGuard에서 사용함
+    ): Promise<string> {
+        return this.postsService.deletePost(id);
     }
 }

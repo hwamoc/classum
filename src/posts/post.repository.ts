@@ -10,14 +10,16 @@ import { PostEntity } from "./post.entity";
 @EntityRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
 
-    async createPost(createPostDto: CreatePostDto, fileEntities: FileEntity[], space: Space, user: User): Promise<PostEntity> {
+    async createPost(
+        createPostDto: CreatePostDto, fileEntities: FileEntity[], space: Space, user: User
+    ): Promise<PostEntity> {
         
         const { postType, title, content, status } = createPostDto;
 
         const post: PostEntity = this.create({
             postType: PostType[postType.toUpperCase()],
             userId: user.id,
-            username: user.fullname,
+            userName: user.fullname,
             title,
             content,
             status: PostStatus[status?.toUpperCase()],
