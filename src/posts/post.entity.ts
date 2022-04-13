@@ -15,6 +15,9 @@ export class PostEntity extends CommonEntity {
     postType: PostType;
 
     @Column()
+    @Expose({
+        groups: [RoleType.ADMIN] 
+    })
     userId: number; 
 
     @Column()

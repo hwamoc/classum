@@ -32,7 +32,7 @@ export class PostStatusValidation implements ValidatorConstraintInterface {
                 return true;
             }
             return false;
-        } else if (PostType[type] === PostType.NOTICE && !status) { 
+        } else if (PostType[type] === PostType.NOTICE && RoleType[role] === RoleType.ADMIN && !status) {
             return true;
         }
         return false;
@@ -61,7 +61,7 @@ export class PostStatusValidation implements ValidatorConstraintInterface {
             } 
             return `There is two post status options: private, public. Admin can't select private.`;
         } else if (PostType[type] === PostType.NOTICE) {
-            return `If post type is notice, don't enter post status.`;
+            return `If post type is notice, don't enter post status. Participan can't select notice`;
         } else {
             return 'Post type is required.';
         }
