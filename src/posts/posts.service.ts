@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileType } from 'src/files/file-type.enum';
 import { FileEntity } from 'src/files/file.entity';
@@ -22,12 +22,7 @@ export class PostsService {
     ) {}
 
     async getAllPosts(spaceId: number, user: User): Promise<PostEntity[]> {
-        const query = this.postRepository.createQueryBuilder('p');
-
-        // 익명 글 처리 해야함!
-        query.where('p.spaceId = :spaceId', { spaceId });
-
-        const posts = await query.getMany();
+        const posts: PostEntity[] = await this.postRepository.find({ where: { space: spaceId } });
 
         return posts;
     }
@@ -52,4 +47,13 @@ export class PostsService {
         }
         return this.postRepository.createPost(createPostDto, fileEntities, space, user);
     }
+
+    async getPost(id: number): Promise<PostEntity> {
+        const post: PostEntity = await this.postRepository.findOne(id);
+        if (!post) {
+            throw new NotFoundException(`Can't find post with id: ${id}`)
+        }
+        return post;
+    }
+
 }

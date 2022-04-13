@@ -17,6 +17,7 @@ export class PostRepository extends Repository<PostEntity> {
         const post: PostEntity = this.create({
             postType: PostType[postType.toUpperCase()],
             userId: user.id,
+            username: user.fullname,
             title,
             content,
             status: PostStatus[status?.toUpperCase()],

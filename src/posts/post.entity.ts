@@ -1,5 +1,7 @@
+import { Expose } from "class-transformer";
 import { CommonEntity } from "src/common/common-entity";
 import { FileEntity } from "src/files/file.entity";
+import { RoleType } from "src/space-roles/role-type.enum";
 import { Space } from "src/spaces/space.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { PostStatus } from "./model/post-status.enum";
@@ -13,6 +15,12 @@ export class PostEntity extends CommonEntity {
 
     @Column()
     userId: number; 
+
+    @Column()
+    @Expose({
+        groups: [RoleType.ADMIN] 
+    })
+    username: string;
 
     @Column()
     title: string;
@@ -34,4 +42,5 @@ export class PostEntity extends CommonEntity {
         onUpdate: 'CASCADE',
     })
     space: Space;
+
 }
