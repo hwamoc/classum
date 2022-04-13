@@ -15,8 +15,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostEntity } from './post.entity';
 import { PostsService } from './posts.service';
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('spaces')
+@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 export class PostsController {
     constructor(private postsService: PostsService) {}
@@ -48,17 +48,16 @@ export class PostsController {
         return this.postsService.createPost(spaceId, createPostDto, files, user);
     }
 
-    @Get('/:spaceId/posts/:id')
+    @Get('/posts/:id')
     @UseInterceptors(RoleSanitizeInterceptor)
     getPost(
         @Param('id', ParseIntPipe) id: number,
     ): Promise<PostEntity> {
-        return this.postsService.getPost(id);
+        return this.postsService.getPost(id, true);
     }
 
-    @Delete('/:spaceId/posts/:id')
+    @Delete('/posts/:id')
     @Self({userIDParam: 'writerId', allowAdmins: true})
-    @Roles(RoleType.ADMIN)
     @UseGuards(SelfGuard)
     deletePost(
         @Param('id', ParseIntPipe) id: number,

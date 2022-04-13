@@ -14,6 +14,7 @@ export class FileEntity extends CommonEntity {
 
     @ManyToOne(type => PostEntity, post => post.files, {
         onUpdate: 'CASCADE',
+        eager: false,
     })
     post: PostEntity;
 }

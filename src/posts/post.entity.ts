@@ -1,4 +1,5 @@
 import { Expose } from "class-transformer";
+import { Chat } from "src/chats/chat.entity";
 import { CommonEntity } from "src/common/common-entity";
 import { FileEntity } from "src/files/file.entity";
 import { RoleType } from "src/space-roles/role-type.enum";
@@ -40,7 +41,12 @@ export class PostEntity extends CommonEntity {
 
     @ManyToOne(type => Space, space => space.posts, {
         onUpdate: 'CASCADE',
+        eager: false,
     })
     space: Space;
 
+    @OneToMany(type => Chat, chat => chat.post, { 
+        cascade: ["insert", "update", "soft-remove"],
+    })
+    chats: Chat[];
 }

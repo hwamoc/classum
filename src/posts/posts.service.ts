@@ -23,7 +23,6 @@ export class PostsService {
 
     async getAllPosts(spaceId: number, user: User): Promise<PostEntity[]> {
         const posts: PostEntity[] = await this.postRepository.find({ where: { space: spaceId } });
-
         return posts;
     }
 
@@ -48,8 +47,17 @@ export class PostsService {
         return this.postRepository.createPost(createPostDto, fileEntities, space, user);
     }
 
-    async getPost(id: number): Promise<PostEntity> {
-        const post: PostEntity = await this.postRepository.findOne(id);
+    async getPost(id: number, withRelation: boolean): Promise<PostEntity> {
+        let post: PostEntity;
+        if (withRelation) {
+            post = await this.postRepository.findOne(
+                id,
+                { relations: [ 'chats' ] }
+            );
+        } else {
+            post = await this.postRepository.findOne(id);
+        }
+
         if (!post) {
             throw new NotFoundException(`Can't find post with id: ${id}`)
         }

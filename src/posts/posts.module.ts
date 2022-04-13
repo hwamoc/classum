@@ -16,6 +16,7 @@ import { PostsService } from './posts.service';
     FilesModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService, UtilsService]
+  providers: [PostsService, UtilsService],
+  exports: [PostsService]
 })
 export class PostsModule {}

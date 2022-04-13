@@ -3,7 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { BoardsModule } from './boards/boards.module';
+import { ChatsModule } from './chats/chats.module';
 import { typeORMConfig } from './configs/typeorm.config';
 import { FilesModule } from './files/files.module';
 import { PostsModule } from './posts/posts.module';
@@ -25,6 +25,7 @@ import { UtilsModule } from './utils/utils.module';
     UserToSpacesModule,
     PostsModule,
     FilesModule,
+    ChatsModule,
   ],
   providers: [
     { 
