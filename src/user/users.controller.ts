@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Param, Post, Res, SerializeOptions, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -9,6 +9,7 @@ import { Id } from './model/user.model';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {

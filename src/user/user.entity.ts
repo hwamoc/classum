@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { CommonEntity } from 'src/common/common-entity';
 import { RoleType } from 'src/space-roles/role-type.enum';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
@@ -17,7 +18,8 @@ export class User extends CommonEntity {
     @Column()
     email: string;
 
-    @Column({ select: false })
+    @Column()
+    @Exclude()
     password: string;
 
     @Column({ nullable: true })
@@ -25,14 +27,14 @@ export class User extends CommonEntity {
 
     @Column({ 
         nullable: true,
-        select: false,
     })
+    @Exclude()
     currentHashedRefreshToken?: string;
 
     @OneToMany(type => UserToSpace, userToSpace => userToSpace.user)
     userToSpaces!: UserToSpace[];
 
-    @OneToMany(type => Board, board => board.user, { eager: true })
+    @OneToMany(type => Board, board => board.user)
     boards: Board[];
 
     @Column({ nullable: true })

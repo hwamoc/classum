@@ -16,7 +16,7 @@ export class UserToSpacesService {
         private userToSpaceRepository: UserToSpaceRepository
     ) {}
 
-    async createUserToSpace(createUserToSpaceDto: CreateUserToSpaceDto, user: User): Promise<UserToSpace> {
+    async createUserToSpace(createUserToSpaceDto: CreateUserToSpaceDto, user: User): Promise<string> {
         const entityManager = getManager();
         const { code } = createUserToSpaceDto;
         const space: Space = await this.validateCode(code, user);

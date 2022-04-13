@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { SpaceRolesModule } from 'src/space-roles/space-roles.module';
-import { UserToSpacesModule } from 'src/user-to-spaces/user-to-spaces.module';
 import { UtilsService } from 'src/utils/utils.service';
 import { SpaceRepository } from './space.repository';
 import { SpacesController } from './spaces.controller';
@@ -15,7 +14,6 @@ import { UsersModule } from '../user/users.module';
     AuthModule,
     SpaceRolesModule,
     UsersModule,
-    // UserToSpacesModule,
   ],
   controllers: [SpacesController],
   providers: [SpacesService, UtilsService],

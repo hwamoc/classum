@@ -16,7 +16,7 @@ export class UserToSpacesController {
     createUserToSpace(
         @Body() createUserToSpaceDto: CreateUserToSpaceDto,
         @GetUser() user: User
-    ): Promise<UserToSpace> {
+    ): Promise<string> {
         return this.userToSpacesService.createUserToSpace(createUserToSpaceDto, user);
     }
 }

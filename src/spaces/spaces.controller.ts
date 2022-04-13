@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -10,6 +10,7 @@ import { CreateSpaceDto } from './dto/create-space.dto';
 import { Space } from './space.entity';
 import { SpacesService } from './spaces.service';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('spaces')
 @UseGuards(JwtAuthGuard)
 export class SpacesController {

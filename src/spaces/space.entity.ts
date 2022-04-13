@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { CommonEntity } from "src/common/common-entity";
 import { PostEntity } from "src/posts/post.entity";
 import { SpaceRole } from "src/space-roles/space-role.entity";
@@ -16,16 +17,12 @@ export class Space extends CommonEntity {
     @Column({ nullable: true })
     logoUrl: string;
 
-    @Column({ 
-        unique: true,
-        select: false,
-    })
+    @Column({ unique: true })
+    @Exclude()
     adminCode: string;
 
-    @Column({ 
-        unique: true,
-        select: false, 
-    })
+    @Column({ unique: true })
+    @Exclude()
     participantCode: string;
 
     @OneToMany(type => UserToSpace, userToSpace => userToSpace.space, {

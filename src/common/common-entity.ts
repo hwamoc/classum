@@ -2,7 +2,7 @@ import { BaseEntity, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn,
 
 export abstract class CommonEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @CreateDateColumn()
     createdAt: Date;
