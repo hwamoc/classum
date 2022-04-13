@@ -24,10 +24,10 @@ export class ChatStatusValidation implements ValidatorConstraintInterface {
         const role: string = await this.getUserRole(id);
         console.log('role', id, role)
         if (this.isStatusValid(status)) {
-            if (PostStatus[status] === PostStatus.PRIVATE && RoleType[role] === RoleType.PARTICIPANT) {    // 사용자의 역할이 참여자일 경우만 익명으로 작성할 수 있다.
-                return true;
+            if (PostStatus[status] === PostStatus.PRIVATE && RoleType[role] === RoleType.ADMIN) {    // 사용자의 역할이 참여자일 경우만 익명으로 작성할 수 있다.
+                return false;
             }
-            return false;
+            return true;
         }
         return false;
     }

@@ -1,3 +1,5 @@
+import { Expose } from 'class-transformer';
+import { RoleType } from 'src/space-roles/role-type.enum';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { CommonEntity } from '../common/common-entity';
 import { PostStatus } from '../posts/model/post-status.enum';
@@ -10,9 +12,15 @@ export class Chat extends CommonEntity {
     headChat: number;
 
     @Column()
+    @Expose({
+        groups: [RoleType.ADMIN] 
+    })
     userId: number;
 
     @Column()
+    @Expose({
+        groups: [RoleType.ADMIN] 
+    })
     userName: string;
 
     @Column()

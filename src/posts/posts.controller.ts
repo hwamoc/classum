@@ -1,13 +1,11 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFiles, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
-import { Roles } from 'src/auth/decorator/roles.decorator';
 import { Self } from 'src/auth/decorator/self.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { SelfGuard } from 'src/auth/guards/self.guard';
 import { RoleSanitizeInterceptor } from 'src/common/interceptors/role-sanitize.interceptor';
 import { ParseFormDataJsonPipe } from 'src/common/pipes/parse-form-data-json.pipe';
-import { RoleType } from 'src/space-roles/role-type.enum';
 import { User } from 'src/user/user.entity';
 import { multerOptions } from 'src/utils/multer-options';
 import { CreatePostBodyDto } from './dto/create-post-body.dto';
@@ -49,7 +47,7 @@ export class PostsController {
     }
 
     @Get('/posts/:id')
-    @UseInterceptors(RoleSanitizeInterceptor)
+    @UseInterceptors(RoleSanitizeInterceptor)   // 포스트 조회시 댓글도 익명 보장
     getPost(
         @Param('id', ParseIntPipe) id: number,
     ): Promise<PostEntity> {
