@@ -1,7 +1,6 @@
 import { CommonEntity } from "src/common/common-entity";
 import { Space } from "src/spaces/space.entity";
-import { UserToSpace } from "src/user-to-spaces/user-to-space.entity";
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { RoleType } from './role-type.enum';
 
 @Entity()
