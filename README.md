@@ -24,52 +24,29 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
 ```bash
 $ npm install
+
+Window의 경우
+$ npm install -g win-node-env
 ```
+
+## 환경에 따른 DB 스키마 명
+```
+Production 환경: prod
+Development 환경: dev
+```
+> 사용할 사용자명과 비밀번호를 config/default.yml 파일에 작성해주세요
 
 ## Running the app
 
 ```bash
 # development
-$ npm run start
-
-# watch mode
 $ npm run start:dev
 
 # production mode
-$ npm run start:prod
+$ npm run start
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
