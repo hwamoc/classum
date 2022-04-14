@@ -30,7 +30,7 @@
 ```bash
 $ npm install
 
-Window의 경우
+Window의 경우 추가
 $ npm install -g win-node-env
 ```
 
