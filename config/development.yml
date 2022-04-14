@@ -2,3 +2,6 @@ db:
   database: 'dev'
   synchronize: true
   logging: true
+
+app:
+  logging: true

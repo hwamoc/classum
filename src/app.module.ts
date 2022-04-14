@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { ChatsModule } from './chats/chats.module';
+import { LoggerModule } from './common/logger/logger.module';
 import { typeORMConfig } from './configs/typeorm.config';
 import { FilesModule } from './files/files.module';
 import { PostsModule } from './posts/posts.module';
@@ -16,7 +17,6 @@ import { UtilsModule } from './utils/utils.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
-    BoardsModule,
     AuthModule,
     UtilsModule,
     UsersModule,
@@ -26,6 +26,7 @@ import { UtilsModule } from './utils/utils.module';
     PostsModule,
     FilesModule,
     ChatsModule,
+    LoggerModule,
   ],
   providers: [
     { 

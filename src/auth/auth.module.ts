@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { LoggerModule } from '../common/logger/logger.module';
 
 const jwtConfig = config.get('jwt');
 
@@ -21,6 +22,7 @@ const jwtConfig = config.get('jwt');
       }
     }),
     UsersModule,
+    LoggerModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],

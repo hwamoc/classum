@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
+import { LoggerModule } from 'src/common/logger/logger.module';
 import { FilesModule } from 'src/files/files.module';
 import { SpacesModule } from 'src/spaces/spaces.module';
 import { UtilsService } from 'src/utils/utils.service';
@@ -14,6 +15,7 @@ import { PostsService } from './posts.service';
     AuthModule,
     SpacesModule,
     FilesModule,
+    LoggerModule,
   ],
   controllers: [PostsController],
   providers: [PostsService, UtilsService],

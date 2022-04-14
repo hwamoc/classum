@@ -1,4 +1,8 @@
 db:
   database: 'prod'
-  synchronize: false
+  synchronize: true
+  --- false로 수정하여야 한다 (테스트용)
+  logging: false
+
+app:
   logging: false
