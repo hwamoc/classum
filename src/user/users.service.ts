@@ -77,7 +77,7 @@ export class UsersService {
         });
     }
 
-    async updateProfile(user: User, image: Express.Multer.File) {
+    async updateProfile(user: User, image: Express.Multer.File): Promise<string> {
         const generatedFile: string = this.utilsService.getFileUrl(image);
         const { affected } = await this.userRepository.update(user.id, {
             profileUrl: generatedFile,
@@ -85,5 +85,6 @@ export class UsersService {
         if (affected === 0) {
             throw new NotFoundException(`User profile image uploading failed. User id: ${user.id}`);
         }
+        return 'successfully updated';
     }
 }

@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable, LoggerService } from '@nestjs/common';
+import { ConsoleLogger, Injectable, LoggerService, LogLevel } from '@nestjs/common';
 import * as config from 'config';
 
 @Injectable()
@@ -13,8 +13,7 @@ export class AppLogger extends ConsoleLogger implements LoggerService {
         /***
          * @condition to check if it is in testing mode
          */
-        if (config.get('app.logging')) {
-            this.setLogLevels(['debug', 'error', 'log',]);
-        }
+        const levels: LogLevel[] = config.get('app.logging') ? ['log'] : [];
+        this.setLogLevels(levels);
     }
 }

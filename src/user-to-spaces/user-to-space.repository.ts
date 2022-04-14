@@ -19,6 +19,6 @@ export class UserToSpaceRepository extends Repository<UserToSpace> {
         if (!saved) {
             throw new InternalServerErrorException('Create user to space failed.')
         }
-        return 'success';
+        return 'successfully invited';
     }
 }
